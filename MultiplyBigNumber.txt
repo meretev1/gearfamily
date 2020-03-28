@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace MultiplyBigNumber
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            char[] number = Console.ReadLine().ToCharArray();            
+            int multiplier = int.Parse(Console.ReadLine());
+            List<string> numbers = new List<string>();
+            for (int i = 0; i < number.Length; i++)
+            {
+                numbers.Add(number[i].ToString());
+            }
+            while (numbers[0] == "0")
+            {
+                numbers.RemoveAt(0);
+            }
+            int num1 = 0;
+            int num2 = 0;
+            
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = numbers.Count - 1; i >= 0; i--)
+            {
+                int num = int.Parse(numbers[i]);
+                num = (num * multiplier) + num2;
+                num1 = num  % 10;               
+                num2 = num / 10;
+                
+                sb.Append(num1.ToString());
+            }
+            if (multiplier == 0)
+            {
+                Console.WriteLine("0");
+            }
+            else
+            {
+                if (num2 > 0)
+                {
+                    sb.Append(num2.ToString());
+                }
+                for (int i = sb.Length - 1; i >= 0; i--)
+                {
+                    Console.Write(sb[i]);
+                }
+            }
+        }
+    }
+}

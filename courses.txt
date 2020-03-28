@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+
+namespace Courses
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, List<string>> allCourses = new Dictionary<string, List<string>>();
+            while (true)
+            {
+                string[] command = Console.ReadLine().Split(" : ");
+                if (command[0] == "end")
+                {
+                    break;
+                }
+
+                string course = command[0];
+                string nameStudent = command[1];
+
+                if (!allCourses.ContainsKey(course))
+                {
+                    List<string> a = new List<string>();
+                    a.Add(nameStudent);
+                    allCourses.Add(course, a);
+                }
+                else
+                {
+                    allCourses[course].Add(nameStudent);
+                }
+            }
+
+            int x = 0;
+            string nameCourse = "";
+            Dictionary<string, List<string>> second = new Dictionary<string, List<string>>();
+            
+            while (allCourses.Count > 0)
+            {
+                foreach (var item in allCourses)
+                {
+                    if (item.Value.Count > x)
+                    {
+                        x = item.Value.Count;
+                        nameCourse = item.Key;                  
+                    }
+                }
+                x = 0;
+                allCourses[nameCourse].Sort();
+                second.Add(nameCourse, allCourses[nameCourse]);               
+                allCourses.Remove(nameCourse);
+            }
+
+            foreach (var item in second)
+            {
+                Console.WriteLine(item.Key + ": " + item.Value.Count);
+                foreach (var item2 in item.Value)
+                {
+                    Console.WriteLine("-- " + item2);
+                }
+            }
+        }
+    }
+}
