@@ -1,0 +1,722 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
+
+namespace TETA05
+{
+    class Program
+    {
+        public static char[,] matrix;
+
+        public static int x1;
+        public static int x2;
+        public static int x3;
+        public static int x4;
+        public static int y1;
+        public static int y2;
+        public static int y3;
+        public static int y4;
+
+        public static int counter;
+        public static int level;
+        public static int points;
+        public static int speed;
+        public static int constSpeed;
+        public static int figureNumber;
+        public static int rotationNumber;
+        static void Main()
+        {
+            matrix = new char[22, 10];
+            speed = 650;
+            constSpeed = 650;
+            level = 1;
+
+            ClearMatrix();
+
+            while (true)
+            {
+                Console.SetCursorPosition(0, 0);
+                Console.CursorVisible = false;
+                Console.WriteLine();
+                Console.WriteLine("  Left arrow - Move left ; Right arrow - Move right");
+                Console.WriteLine();
+                Console.WriteLine("  Spacebar - Rotate ; Down arrow - Fast down ; ESC - Exit");
+                Console.WriteLine();
+                Console.WriteLine("  Press any key to continue ...");
+
+                Thread.Sleep(speed);
+
+                if (Console.KeyAvailable)
+                {
+                    Console.Clear();
+                    break;
+                }
+            }
+
+            Random rnd = new Random();
+            figureNumber = rnd.Next(1, 4);
+
+            counter = 0;
+            int outNumber = 0;
+
+            while (CheckUp())
+            {
+                if (outNumber > 0)
+                {
+                    break;
+                }
+
+                if (level == 0)
+                {
+                    Console.WriteLine("Success!");
+                    break;
+                }
+
+                if (figureNumber == 1)
+                {
+                    Fig1();
+                }
+                else if (figureNumber == 2)
+                {
+                    Fig2();
+                }
+                else if (figureNumber == 3)
+                {
+                    Fig3();
+                }
+
+                rotationNumber = 0;
+
+                while (true)
+                {
+                    Print();
+
+                    Thread.Sleep(speed);
+
+                    if (Console.KeyAvailable)
+                    {
+                        var key = Console.ReadKey().Key;
+
+                        if (key == ConsoleKey.Escape)
+                        {
+                            outNumber++;
+                            break;
+                        }
+
+                        if (key == ConsoleKey.LeftArrow)
+                        {
+                            MoveLeft();
+                        }
+
+                        if (key == ConsoleKey.RightArrow)
+                        {
+                            MoveRight();
+                        }
+
+                        if (key == ConsoleKey.DownArrow)
+                        {
+                            speed = 0;
+                        }
+
+                        if (key == ConsoleKey.Spacebar)
+                        {
+                            Rotate();
+                        }
+                    }
+
+                    if (Check())
+                    {
+                        ClearFigure();
+                        Down();
+                    }
+                    else
+                    {
+                        RemoveLines();
+                        speed = constSpeed;
+                        figureNumber = rnd.Next(1, 4);
+                        break;
+                    }
+
+                    counter++;
+
+                }
+            }
+
+            Console.WriteLine("Game over!");
+        }
+
+        private static bool CheckUp()
+        {
+            if (matrix[2, 3] == ' ')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static void RemoveLines()
+        {
+            int fullNumber = 0;
+
+            for (int i = 21; i >= 0; i--)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (matrix[i, j] != '*')
+                    {
+                        fullNumber++;
+                    }
+                }
+
+                if (fullNumber == 0)
+                {
+                    for (int k = i; k > 0; k--)
+                    {
+                        for (int l = 0; l < 10; l++)
+                        {
+                            matrix[k, l] = matrix[k - 1, l];
+                        }
+                    }
+
+                    points += 10;
+                    Print();
+                    i++;
+
+                    if (points >= 100)
+                    {
+                        points = 0;
+                        counter = 0; ;
+                        ClearMatrix();
+                        
+                        level++;
+
+                        if (level == 5)
+                        {
+                            level = 0;
+                        }
+
+                        Print();
+
+                        speed -= 100;
+                        constSpeed -= 100;
+                    }
+                }
+
+                fullNumber = 0;
+            }
+        }
+
+        private static void ClearMatrix()
+        {
+            for (int i = 0; i < 22; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    matrix[i, j] = ' ';
+                }
+            }
+        }
+
+        private static void ClearFigure()
+        {
+            matrix[x1, y1] = ' ';
+            matrix[x2, y2] = ' ';
+            matrix[x3, y3] = ' ';
+            matrix[x4, y4] = ' ';
+        }
+
+        private static void Fig1()
+        {
+            x1 = 2;
+            x2 = 2;
+            x3 = 2;
+            x4 = 2;
+            y1 = 3;
+            y2 = 4;
+            y3 = 5;
+            y4 = 6;
+
+            matrix[x1, y1] = '*';
+            matrix[x2, y2] = '*';
+            matrix[x3, y3] = '*';
+            matrix[x4, y4] = '*';
+        }
+
+        private static void Fig2()
+        {
+            x1 = 2;
+            x2 = 2;
+            x3 = 2;
+            x4 = 1;
+            y1 = 3;
+            y2 = 4;
+            y3 = 5;
+            y4 = 5;
+
+            matrix[x1, y1] = '*';
+            matrix[x2, y2] = '*';
+            matrix[x3, y3] = '*';
+            matrix[x4, y4] = '*';
+        }
+
+        private static void Fig3()
+        {
+            x1 = 2;
+            x2 = 2;
+            x3 = 1;
+            x4 = 1;
+            y1 = 3;
+            y2 = 4;
+            y3 = 4;
+            y4 = 5;
+
+            matrix[x1, y1] = '*';
+            matrix[x2, y2] = '*';
+            matrix[x3, y3] = '*';
+            matrix[x4, y4] = '*';
+        }
+
+        private static void MoveRight()
+        {
+            if (CheckSide())
+            {
+                ClearFigure();
+                y1++;
+                y2++;
+                y3++;
+                y4++;
+            }
+        }
+
+        private static bool CheckSide()
+        {
+            if (y1 + 1 < 10 && y1 - 1 >= 0 && y2 + 1 < 10 && y2 - 1 >= 0
+                && y3 + 1 < 10 && y3 - 1 >= 0 && y4 + 1 < 10 && y4 - 1 >= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static void MoveLeft()
+        {
+            if (CheckSide())
+            {
+                ClearFigure();
+                y1--;
+                y2--;
+                y3--;
+                y4--;
+            }
+        }
+
+        private static void Down()
+        {
+            if (x1 < 21 && x2 < 21 && x3 < 21 && x4 < 21)
+            {
+                x1++;
+                x2++;
+                x3++;
+                x4++;
+            }
+
+            matrix[x1, y1] = '*';
+            matrix[x2, y2] = '*';
+            matrix[x3, y3] = '*';
+            matrix[x4, y4] = '*';
+        }
+
+        private static bool Check()
+        {
+            if (figureNumber == 1 && rotationNumber % 2 != 0 && BottomChecking() && CheckFig11())
+            {
+                return true;
+            }
+            else if (figureNumber == 1 && rotationNumber % 2 == 0 && BottomChecking() && CheckFig12())
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && (rotationNumber == 0 || rotationNumber == 4)
+                && BottomChecking() && CheckFig24())
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && rotationNumber == 1 && BottomChecking() && CheckFig21())
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && rotationNumber == 2 && BottomChecking() && CheckFig22())
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && rotationNumber == 3 && BottomChecking() && CheckFig23())
+            {
+                return true;
+            }
+            else if (figureNumber == 3 && rotationNumber % 2 != 0 && BottomChecking() && CheckFig31())
+            {
+                return true;
+            }
+            else if (figureNumber == 3 && rotationNumber % 2 == 0 && BottomChecking() && CheckFig32())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckFig31()
+        {
+            if (matrix[x2 + 1, y2] != '*' && matrix[x4 + 1, y4] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckFig32()
+        {
+            if (matrix[x1 + 1, y1] != '*' && matrix[x2 + 1, y2] != '*' &&
+                matrix[x4 + 1, y4] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckFig21()
+        {
+            if (matrix[x3 + 1, y3] != '*' && matrix[x4 + 1, y4] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckFig22()
+        {
+            if (matrix[x1 + 1, y1] != '*' && matrix[x2 + 1, y2] != '*' &&
+                matrix[x4 + 1, y4] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckFig23()
+        {
+            if (matrix[x1 + 1, y1] != '*' && matrix[x4 + 1, y4] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckFig24()
+        {
+            if (matrix[x1 + 1, y1] != '*' && matrix[x2 + 1, y2] != '*' &&
+                matrix[x3 + 1, y3] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckFig12()
+        {
+            if (matrix[x1 + 1, y1] != '*' && matrix[x2 + 1, y2] != '*' &&
+                matrix[x3 + 1, y3] != '*' && matrix[x4 + 1, y4] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckFig11()
+        {
+            if (matrix[x1 + 1, y1] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool BottomChecking()
+        {
+            if (x1 + 1 < 22 && x2 + 1 < 22 && x3 + 1 < 22 && x4 + 1 < 22)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static void Rotate()
+        {
+            rotationNumber++;
+            if (rotationNumber == 5)
+            {
+                rotationNumber = 1;
+            }
+
+            if (figureNumber == 1)
+            {
+                if (rotationNumber % 2 != 0)
+                {
+                    Fig11();
+                }
+                else
+                {
+                    if (y1 - 1 >= 0 && y4 + 2 < 10)
+                    {
+                        Fig12();
+                    }
+                    else
+                    {
+                        rotationNumber--;
+                    }
+                }
+            }
+            else if (figureNumber == 2)
+            {
+                if (rotationNumber == 1)
+                {
+                    Fig21();
+                }
+                else if (rotationNumber == 2)
+                {
+                    if (y3 - 1 >= 0 && y1 + 1 < 10)
+                    {
+                        Fig22();
+                    }
+                    else
+                    {
+                        rotationNumber--;
+                    }
+                }
+                else if (rotationNumber == 3)
+                {
+                    Fig23();
+                }
+                else if (rotationNumber == 4)
+                {
+                    if (y1 - 1 >= 0 && y3 + 1 < 10)
+                    {
+                        Fig24();
+                    }
+                    else
+                    {
+                        rotationNumber--;
+                    }
+                }
+            }
+            else if (figureNumber == 3)
+            {
+                if (rotationNumber % 2 != 0)
+                {
+                    Fig31();
+                }
+                else
+                {
+                    if (y1 - 1 >= 0 && y4 + 1 < 10)
+                    {
+                        Fig32();
+                    }
+                    else
+                    {
+                        rotationNumber--;
+                    }
+                }
+            }
+
+        }
+
+        private static void Fig12()
+        {
+            ClearFigure();
+
+            x1 -= 1;
+            x3 += 1;
+            x4 += 2;
+            y1 -= 1;
+            y3 += 1;
+            y4 += 2;
+        }
+
+        private static void Fig11()
+        {
+            ClearFigure();
+
+            x1 += 1;
+            x3 -= 1;
+            x4 -= 2;
+            y1 += 1;
+            y3 -= 1;
+            y4 -= 2;
+        }
+
+        private static void Fig21()
+        {
+            ClearFigure();
+
+            x1 -= 1;
+            x3 += 1;
+            x4 += 2;
+            y1 += 1;
+            y3 -= 1;
+
+        }
+
+        private static void Fig22()
+        {
+            ClearFigure();
+
+            x1 += 1;
+            x3 -= 1;
+            y1 += 1;
+            y3 -= 1;
+            y4 -= 2;
+        }
+
+        private static void Fig23()
+        {
+            ClearFigure();
+
+            x1 += 1;
+            x3 -= 1;
+            x4 -= 2;
+            y1 -= 1;
+            y3 += 1;
+
+        }
+
+        private static void Fig24()
+        {
+            ClearFigure();
+
+            x1 -= 1;
+            x3 += 1;
+            y1 -= 1;
+            y3 += 1;
+            y4 += 2;
+        }
+
+        private static void Fig31()
+        {
+            ClearFigure();
+
+            x1 -= 1;
+            x3 += 1;
+            x4 += 2;
+            y1 += 1;
+            y3 += 1;
+            
+        }
+
+        private static void Fig32()
+        {
+            ClearFigure();
+
+            x1 += 1;
+            x3 -= 1;
+            x4 -= 2;
+            y1 -= 1;
+            y3 -= 1;
+            
+        }
+
+        static void Print()
+        {
+            StringBuilder line = new StringBuilder();
+
+            Console.SetCursorPosition(0, 0);
+            Console.CursorVisible = false;
+
+            for (int i = 0; i < 22; i++)
+            {
+                string c = counter.ToString();
+                string p = points.ToString();
+
+                line = new StringBuilder();
+
+                if (i < 2)
+                {
+                    line.Append(' ');
+                }
+                else
+                {
+                    line.Append('I');
+                }
+
+                for (int j = 0; j < 10; j++)
+                {
+                    line.Append(matrix[i, j]);
+                }
+
+                if (i < 2)
+                {
+                    line.Append(' ');
+                }
+                else
+                {
+                    line.Append('I');
+                }
+
+                if (i == 2)
+                {
+                    line.Append("  Score: " + c);
+                }
+
+                if (i == 3)
+                {
+                    line.Append("  Level: " + level.ToString());
+                }
+
+                if (i == 4)
+                {
+                    line.Append("  Points: " + p);
+                }
+
+                Console.WriteLine(line);
+
+            }
+
+            Console.WriteLine("IIIIIIIIIIII");
+        }
+    }
+}
