@@ -25,6 +25,7 @@ namespace TETA05
         public static int constSpeed;
         public static int figureNumber;
         public static int rotationNumber;
+        
         static void Main()
         {
             matrix = new char[22, 10];
