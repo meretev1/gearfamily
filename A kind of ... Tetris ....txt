@@ -318,7 +318,7 @@ namespace TETA05
 
         private static void MoveRight()
         {
-            if (CheckSide())
+            if (CheckRightSide())
             {
                 ClearFigure();
                 y1++;
@@ -328,10 +328,23 @@ namespace TETA05
             }
         }
 
-        private static bool CheckSide()
+        private static bool CheckRightSide()
         {
-            if (y1 + 1 < 10 && y1 - 1 >= 0 && y2 + 1 < 10 && y2 - 1 >= 0
-                && y3 + 1 < 10 && y3 - 1 >= 0 && y4 + 1 < 10 && y4 - 1 >= 0)
+            if (y1 + 1 < 10 && y2 + 1 < 10
+                && y3 + 1 < 10 && y4 + 1 < 10)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckLeftSide()
+        {
+            if (y1 - 1 >= 0 && y2 - 1 >= 0
+                && y3 - 1 >= 0 && y4 - 1 >= 0)
             {
                 return true;
             }
@@ -343,7 +356,7 @@ namespace TETA05
 
         private static void MoveLeft()
         {
-            if (CheckSide())
+            if (CheckLeftSide())
             {
                 ClearFigure();
                 y1--;
