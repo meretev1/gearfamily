@@ -755,7 +755,11 @@ namespace TETA05
 
                 else if (i == 4)
                 {
-                    if (points < 100)
+                    if (points < 10)
+                    {
+                        line.Append("  Points:   " + points.ToString());
+                    }
+                    else if (points >= 10 && points < 100)
                     {
                         line.Append("  Points:  " + points.ToString());
                     }
