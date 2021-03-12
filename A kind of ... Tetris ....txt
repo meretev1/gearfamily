@@ -23,9 +23,12 @@ namespace TETA05
         public static int points;
         public static int speed;
         public static int constSpeed;
+        public static string figureString1;
+        public static string figureString2;
+        public static Queue<int> figureQueue = new Queue<int>();
         public static int figureNumber;
         public static int rotationNumber;
-        
+
         static void Main()
         {
             matrix = new char[22, 10];
@@ -56,7 +59,13 @@ namespace TETA05
             }
 
             Random rnd = new Random();
-            figureNumber = rnd.Next(1, 4);
+            int figureNumberRandom = rnd.Next(1, 4);
+
+            for (int i = 0; i < 2; i++)
+            {
+                figureQueue.Enqueue(figureNumberRandom);
+                figureNumberRandom = rnd.Next(1, 4);
+            }
 
             counter = 0;
             int outNumber = 0;
@@ -73,6 +82,13 @@ namespace TETA05
                     Console.WriteLine("Success!");
                     break;
                 }
+
+                figureNumber = figureQueue.Dequeue();
+                int figNumNext = figureQueue.Peek();
+                
+                PrintNext(figNumNext);
+                figureNumberRandom = rnd.Next(1, 4);
+                figureQueue.Enqueue(figureNumberRandom);
 
                 if (figureNumber == 1)
                 {
@@ -145,6 +161,25 @@ namespace TETA05
             }
 
             Console.WriteLine("Game over!");
+        }
+
+        private static void PrintNext(int figNumNext)
+        {
+            switch (figNumNext)
+            {
+                case 1:
+                    figureString1 = "      ";
+                    figureString2 = "  ****";
+                    break;
+                case 2:
+                    figureString1 = "    * ";
+                    figureString2 = "  *** ";
+                    break;
+                case 3:
+                    figureString1 = "   ** ";
+                    figureString2 = "  **  ";
+                    break;
+            }
         }
 
         private static bool CheckUp()
@@ -662,18 +697,13 @@ namespace TETA05
         }
 
         static void Print()
-        {
-            StringBuilder line = new StringBuilder();
-
+        {            
             Console.SetCursorPosition(0, 0);
             Console.CursorVisible = false;
 
             for (int i = 0; i < 22; i++)
-            {
-                string c = counter.ToString();
-                string p = points.ToString();
-
-                line = new StringBuilder();
+            {                
+                var line = new StringBuilder();
 
                 if (i < 2)
                 {
@@ -700,20 +730,33 @@ namespace TETA05
 
                 if (i == 2)
                 {
-                    line.Append("  Score: " + c);
+                    line.Append("  Score: " + counter.ToString());
                 }
 
-                if (i == 3)
+                else if (i == 3)
                 {
                     line.Append("  Level: " + level.ToString());
                 }
 
-                if (i == 4)
+                else if (i == 4)
                 {
-                    line.Append("  Points: " + p);
+                    line.Append("  Points: " + points.ToString());
+                }
+                else if (i == 6)
+                {
+                    line.Append("  Next figure:");
+                }
+                else if (i == 8)
+                {
+                    line.Append(figureString1);
                 }
 
-                Console.WriteLine(line);
+                else if (i == 9)
+                {
+                    line.Append(figureString2);
+                }
+
+                Console.WriteLine(line.ToString());
 
             }
 
