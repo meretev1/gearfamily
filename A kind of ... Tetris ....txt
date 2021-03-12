@@ -237,8 +237,8 @@ namespace TETA05
 
                         Print();
 
-                        speed -= 100;
-                        constSpeed -= 100;
+                        speed -= 50;
+                        constSpeed -= 50;
                     }
                 }
 
@@ -730,7 +730,22 @@ namespace TETA05
 
                 if (i == 2)
                 {
-                    line.Append("  Score: " + counter.ToString());
+                    if (counter < 10)
+                    {
+                        line.Append("  Score:    " + counter.ToString());
+                    }
+                    else if (counter >= 10 && counter < 100)
+                    {
+                        line.Append("  Score:   " + counter.ToString());
+                    }
+                    else if (counter >= 100 && counter < 1000)
+                    {
+                        line.Append("  Score:  " + counter.ToString());
+                    }
+                    else
+                    {
+                        line.Append("  Score: " + counter.ToString());
+                    }
                 }
 
                 else if (i == 3)
@@ -740,7 +755,14 @@ namespace TETA05
 
                 else if (i == 4)
                 {
-                    line.Append("  Points: " + points.ToString());
+                    if (points < 100)
+                    {
+                        line.Append("  Points:  " + points.ToString());
+                    }
+                    else
+                    {
+                        line.Append("  Points: " + points.ToString());
+                    }
                 }
                 else if (i == 6)
                 {
