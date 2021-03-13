@@ -184,7 +184,7 @@ namespace TETA05
 
         private static bool CheckUp()
         {
-            if (matrix[2, 3] == ' ')
+            if (matrix[2, 3] == ' ' && matrix[3, 3] == ' ')
             {
                 return true;
             }
@@ -318,7 +318,7 @@ namespace TETA05
 
         private static void MoveRight()
         {
-            if (CheckRightSide())
+            if (CheckRightSide() && CheckRightNeighbour())
             {
                 ClearFigure();
                 y1++;
@@ -356,13 +356,105 @@ namespace TETA05
 
         private static void MoveLeft()
         {
-            if (CheckLeftSide())
+            if (CheckLeftSide() && CheckLeftNeighbour())
             {
                 ClearFigure();
                 y1--;
                 y2--;
                 y3--;
                 y4--;
+            }
+        }
+
+        private static bool CheckLeftNeighbour()
+        {
+            if (figureNumber == 1 && rotationNumber % 2 != 0 && matrix[x1, y1 - 1] != '*' &&
+                matrix[x2, y2 - 1] != '*' && matrix[x3, y3 - 1] != '*' && matrix[x4, y4 - 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 1 && rotationNumber % 2 == 0 && matrix[x1, y1 - 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && (rotationNumber == 0 || rotationNumber == 4)
+                && matrix[x1, y1 - 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && rotationNumber == 1 &&
+                matrix[x1, y1 - 1] != '*' && matrix[x2, y2 - 1] != '*' && matrix[x3, y3 - 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && rotationNumber == 2 &&
+                matrix[x3, y3 - 1] != '*' && matrix[x4, y4 - 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && rotationNumber == 3 && matrix[x1, y1 - 1] != '*' &&
+                matrix[x2, y2 - 1] != '*' && matrix[x4, y4 - 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 3 && rotationNumber % 2 == 0 && matrix[x1, y1 - 1] != '*' && matrix[x3, y3 - 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 3 && rotationNumber % 2 != 0 && matrix[x1, y1 - 1] != '*' &&
+                matrix[x2, y2 - 1] != '*' && matrix[x4, y4 - 1] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static bool CheckRightNeighbour()
+        {
+            if (figureNumber == 1 && rotationNumber % 2 != 0 && matrix[x1, y1 + 1] != '*' &&
+                matrix[x2, y2 + 1] != '*' && matrix[x3, y3 + 1] != '*' && matrix[x4, y4 + 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 1 && rotationNumber % 2 == 0 && matrix[x4, y4 + 1] != '*' )
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && (rotationNumber == 0 || rotationNumber == 4)
+                && matrix[x3, y3 + 1] != '*' && matrix[x4, y4 + 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && rotationNumber == 1 &&
+                matrix[x1, y1 + 1] != '*' && matrix[x2, y2 + 1] != '*' && matrix[x4, y4 + 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && rotationNumber == 2 &&
+                matrix[x1, y1 + 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 2 && rotationNumber == 3 && matrix[x1, y1 + 1] != '*' &&
+                matrix[x2, y2 + 1] != '*' && matrix[x3, y3 + 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 3 && rotationNumber % 2 == 0 && matrix[x2, y2 + 1] != '*' && matrix[x4, y4 + 1] != '*')
+            {
+                return true;
+            }
+            else if (figureNumber == 3 && rotationNumber % 2 != 0 && matrix[x1, y1 + 1] != '*' &&
+                matrix[x3, y3 + 1] != '*' && matrix[x4, y4 + 1] != '*')
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
