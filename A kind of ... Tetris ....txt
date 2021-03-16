@@ -17,6 +17,8 @@ namespace TETA05
         public static int y2;
         public static int y3;
         public static int y4;
+        public static int height;
+        public static int width;
 
         public static int counter;
         public static int level;
@@ -31,7 +33,25 @@ namespace TETA05
 
         static void Main()
         {
-            matrix = new char[22, 10];
+            Console.WriteLine("Give the arrea:");
+            
+            while (height < 22 || height > 42)
+            {
+                Console.Write("Height (20 - 40): ");
+                height = int.Parse(Console.ReadLine());
+                height += 2;
+            }
+
+            while (width < 10 || width > 30)
+            {
+                Console.Write("Width (10 - 30): ");
+                width = int.Parse(Console.ReadLine());
+            }
+
+            Console.WindowHeight = height + 6;
+            Console.Clear();
+
+            matrix = new char[height, width];
             speed = 650;
             constSpeed = 650;
             level = 1;
@@ -184,7 +204,7 @@ namespace TETA05
 
         private static bool CheckUp()
         {
-            if (matrix[2, 3] == ' ' && matrix[3, 3] == ' ')
+            if (matrix[2, width / 2 - 2] == ' ' && matrix[2, width / 2 - 1] == ' ')
             {
                 return true;
             }
@@ -198,9 +218,9 @@ namespace TETA05
         {
             int fullNumber = 0;
 
-            for (int i = 21; i >= 0; i--)
+            for (int i = height - 1; i >= 0; i--)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < width; j++)
                 {
                     if (matrix[i, j] != '*')
                     {
@@ -212,7 +232,7 @@ namespace TETA05
                 {
                     for (int k = i; k > 0; k--)
                     {
-                        for (int l = 0; l < 10; l++)
+                        for (int l = 0; l < width; l++)
                         {
                             matrix[k, l] = matrix[k - 1, l];
                         }
@@ -248,9 +268,9 @@ namespace TETA05
 
         private static void ClearMatrix()
         {
-            for (int i = 0; i < 22; i++)
+            for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < width; j++)
                 {
                     matrix[i, j] = ' ';
                 }
@@ -271,10 +291,10 @@ namespace TETA05
             x2 = 2;
             x3 = 2;
             x4 = 2;
-            y1 = 3;
-            y2 = 4;
-            y3 = 5;
-            y4 = 6;
+            y1 = width / 2 - 2;
+            y2 = width / 2 - 1;
+            y3 = width / 2;
+            y4 = width / 2 + 1;
 
             matrix[x1, y1] = '*';
             matrix[x2, y2] = '*';
@@ -288,10 +308,10 @@ namespace TETA05
             x2 = 2;
             x3 = 2;
             x4 = 1;
-            y1 = 3;
-            y2 = 4;
-            y3 = 5;
-            y4 = 5;
+            y1 = width / 2 - 2;
+            y2 = width / 2 - 1;
+            y3 = width / 2;
+            y4 = width / 2;
 
             matrix[x1, y1] = '*';
             matrix[x2, y2] = '*';
@@ -305,10 +325,10 @@ namespace TETA05
             x2 = 2;
             x3 = 1;
             x4 = 1;
-            y1 = 3;
-            y2 = 4;
-            y3 = 4;
-            y4 = 5;
+            y1 = width / 2 - 2;
+            y2 = width / 2 - 1;
+            y3 = width / 2 - 1;
+            y4 = width / 2;
 
             matrix[x1, y1] = '*';
             matrix[x2, y2] = '*';
@@ -330,8 +350,8 @@ namespace TETA05
 
         private static bool CheckRightSide()
         {
-            if (y1 + 1 < 10 && y2 + 1 < 10
-                && y3 + 1 < 10 && y4 + 1 < 10)
+            if (y1 + 1 < width && y2 + 1 < width
+                && y3 + 1 < width && y4 + 1 < width)
             {
                 return true;
             }
@@ -460,7 +480,7 @@ namespace TETA05
 
         private static void Down()
         {
-            if (x1 < 21 && x2 < 21 && x3 < 21 && x4 < 21)
+            if (x1 < height - 1 && x2 < height - 1 && x3 < height - 1 && x4 < height - 1)
             {
                 x1++;
                 x2++;
@@ -493,7 +513,7 @@ namespace TETA05
             {
                 return true;
             }
-            else if (figureNumber == 2 && rotationNumber == 2 && BottomChecking() && CheckFig22())
+            else if (figureNumber == 2 && rotationNumber == 2 && BottomChecking() && CheckFigheight())
             {
                 return true;
             }
@@ -552,7 +572,7 @@ namespace TETA05
             }
         }
 
-        private static bool CheckFig22()
+        private static bool CheckFigheight()
         {
             if (matrix[x1 + 1, y1] != '*' && matrix[x2 + 1, y2] != '*' &&
                 matrix[x4 + 1, y4] != '*')
@@ -617,7 +637,7 @@ namespace TETA05
 
         private static bool BottomChecking()
         {
-            if (x1 + 1 < 22 && x2 + 1 < 22 && x3 + 1 < 22 && x4 + 1 < 22)
+            if (x1 + 1 < height && x2 + 1 < height && x3 + 1 < height && x4 + 1 < height)
             {
                 return true;
             }
@@ -643,7 +663,7 @@ namespace TETA05
                 }
                 else
                 {
-                    if (y1 - 1 >= 0 && y4 + 2 < 10)
+                    if (y1 - 1 >= 0 && y4 + 2 < width)
                     {
                         Fig12();
                     }
@@ -661,9 +681,9 @@ namespace TETA05
                 }
                 else if (rotationNumber == 2)
                 {
-                    if (y3 - 1 >= 0 && y1 + 1 < 10)
+                    if (y3 - 1 >= 0 && y1 + 1 < width)
                     {
-                        Fig22();
+                        Figheight();
                     }
                     else
                     {
@@ -676,7 +696,7 @@ namespace TETA05
                 }
                 else if (rotationNumber == 4)
                 {
-                    if (y1 - 1 >= 0 && y3 + 1 < 10)
+                    if (y1 - 1 >= 0 && y3 + 1 < width)
                     {
                         Fig24();
                     }
@@ -694,7 +714,7 @@ namespace TETA05
                 }
                 else
                 {
-                    if (y1 - 1 >= 0 && y4 + 1 < 10)
+                    if (y1 - 1 >= 0 && y4 + 1 < width)
                     {
                         Fig32();
                     }
@@ -743,7 +763,7 @@ namespace TETA05
 
         }
 
-        private static void Fig22()
+        private static void Figheight()
         {
             ClearFigure();
 
@@ -806,7 +826,7 @@ namespace TETA05
             Console.SetCursorPosition(0, 0);
             Console.CursorVisible = false;
 
-            for (int i = 0; i < 22; i++)
+            for (int i = 0; i < height; i++)
             {                
                 var line = new StringBuilder();
 
@@ -819,7 +839,7 @@ namespace TETA05
                     line.Append('I');
                 }
 
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < width; j++)
                 {
                     line.Append(matrix[i, j]);
                 }
@@ -891,7 +911,14 @@ namespace TETA05
 
             }
 
-            Console.WriteLine("IIIIIIIIIIII");
+            StringBuilder lastLine = new StringBuilder();
+
+            for (int i = 0; i < width + 2; i++)
+            {
+                lastLine.Append('I');
+            }
+
+            Console.WriteLine(lastLine);
         }
     }
 }
