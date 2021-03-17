@@ -48,7 +48,7 @@ namespace TETA05
                 width = int.Parse(Console.ReadLine());
             }
 
-            Console.WindowHeight = height + 6;
+            Console.WindowHeight = height + 8;            
             Console.Clear();
 
             matrix = new char[height, width];
@@ -170,8 +170,7 @@ namespace TETA05
                     else
                     {
                         RemoveLines();
-                        speed = constSpeed;
-                        figureNumber = rnd.Next(1, 4);
+                        speed = constSpeed;                        
                         break;
                     }
 
@@ -181,6 +180,13 @@ namespace TETA05
             }
 
             Console.WriteLine("Game over!");
+            
+            while (!Console.KeyAvailable)
+            {
+                Console.SetCursorPosition(0, height + 2);
+                Console.WriteLine("Press any key to close ...");
+                Thread.Sleep(speed);
+            }
         }
 
         private static void PrintNext(int figNumNext)
