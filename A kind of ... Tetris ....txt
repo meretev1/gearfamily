@@ -670,74 +670,108 @@ namespace TETA05
                 rotationNumber = 1;
             }
 
-            if (figureNumber == 1)
+            switch (figureNumber)
             {
-                if (rotationNumber % 2 != 0)
-                {
-                    Fig11();
-                }
-                else
-                {
-                    if (y1 - 1 >= 0 && y4 + 2 < width)
+                case 1:
+                    if (rotationNumber % 2 != 0)
                     {
-                        Fig12();
+                        if (x2 + 1 < height)
+                        {
+                            Fig11();
+                        }
+                        else
+                        {
+                            rotationNumber--;
+                        }
                     }
                     else
                     {
-                        rotationNumber--;
+                        if (y2 - 1 >= 0 && y2 + 2 < width && matrix[x1, y1 - 1] != '*' && matrix[x2, y2 - 1] != '*'
+                            && matrix[x2, y2 + 1] != '*' && matrix[x2, y2 + 2] != '*')
+                        {
+                            Fig12();
+                        }
+                        else
+                        {
+                            rotationNumber--;
+                        }
                     }
-                }
-            }
-            else if (figureNumber == 2)
-            {
-                if (rotationNumber == 1)
-                {
-                    Fig21();
-                }
-                else if (rotationNumber == 2)
-                {
-                    if (y3 - 1 >= 0 && y1 + 1 < width)
+                    break;
+                case 2:
+                    if (rotationNumber == 1)
                     {
-                        Fig22();
+                        if (x2 + 1 < height && matrix[x2 + 1, y2] != '*'
+                            && matrix[x2 + 1, y2 + 1] != '*' && matrix[x3 + 1, y3] != '*')
+                        {
+                            Fig21();
+                        }
+                        else
+                        {
+                            rotationNumber--;
+                        }
+                    }
+                    else if (rotationNumber == 2)
+                    {
+                        if (y2 - 1 >= 0 && y2 + 1 < width && matrix[x1, y1 + 1] != '*' && matrix[x2, y2 - 1] != '*'
+                            && matrix[x2 + 1, y2 - 1] != '*' && matrix[x3, y3 - 1] != '*')
+                        {
+                            Fig22();
+                        }
+                        else
+                        {
+                            rotationNumber--;
+                        }
+                    }
+                    else if (rotationNumber == 3)
+                    {
+                        if (y4 - 1 >= 0 && x2 + 1 < height && matrix[x1 + 1, y1] != '*' && matrix[x2 + 1, y2] != '*' 
+                            && matrix[x4, y4 - 1] != '*')
+                        {
+                            Fig23();
+                        }
+                        else
+                        {
+                            rotationNumber--;
+                        }
+                    }
+                    else if (rotationNumber == 4)
+                    {
+                        if (y2 - 1 >= 0 && y2 + 1 < width && matrix[x1, y1 - 1] != '*' && matrix[x2, y2 - 1] != '*'
+                            && matrix[x2, y2 + 1] != '*' && matrix[x3, y3 + 1] != '*')
+                        {
+                            Fig24();
+                        }
+                        else
+                        {
+                            rotationNumber--;
+                        }
+                    }
+                    break;
+                case 3:
+                    if (rotationNumber % 2 != 0)
+                    {
+                        if (x2 + 1 < height && matrix[x2 + 1, y2 + 1] != '*')
+                        {
+                            Fig31();
+                        }
+                        else
+                        {
+                            rotationNumber--;
+                        }
                     }
                     else
                     {
-                        rotationNumber--;
+                        if (y2 - 1 >= 0 && y2 + 1 < width && y4 + 1 < width && matrix[x2 - 1, y2 - 1] != '*'
+                            && matrix[x2, y2 - 1] != '*' && matrix[x4, y4 + 1] != '*')
+                        {
+                            Fig32();
+                        }
+                        else
+                        {
+                            rotationNumber--;
+                        }
                     }
-                }
-                else if (rotationNumber == 3)
-                {
-                    Fig23();
-                }
-                else if (rotationNumber == 4)
-                {
-                    if (y1 - 1 >= 0 && y3 + 1 < width)
-                    {
-                        Fig24();
-                    }
-                    else
-                    {
-                        rotationNumber--;
-                    }
-                }
-            }
-            else if (figureNumber == 3)
-            {
-                if (rotationNumber % 2 != 0)
-                {
-                    Fig31();
-                }
-                else
-                {
-                    if (y1 - 1 >= 0 && y4 + 1 < width)
-                    {
-                        Fig32();
-                    }
-                    else
-                    {
-                        rotationNumber--;
-                    }
-                }
+                    break;
             }
 
         }
@@ -752,6 +786,8 @@ namespace TETA05
             y1 -= 1;
             y3 += 1;
             y4 += 2;
+
+            PrintFigure();
         }
 
         private static void Fig11()
@@ -764,6 +800,8 @@ namespace TETA05
             y1 += 1;
             y3 -= 1;
             y4 -= 2;
+
+            PrintFigure();
         }
 
         private static void Fig21()
@@ -776,6 +814,7 @@ namespace TETA05
             y1 += 1;
             y3 -= 1;
 
+            PrintFigure();
         }
 
         private static void Fig22()
@@ -787,6 +826,8 @@ namespace TETA05
             y1 += 1;
             y3 -= 1;
             y4 -= 2;
+
+            PrintFigure();
         }
 
         private static void Fig23()
@@ -799,6 +840,7 @@ namespace TETA05
             y1 -= 1;
             y3 += 1;
 
+            PrintFigure();
         }
 
         private static void Fig24()
@@ -810,6 +852,8 @@ namespace TETA05
             y1 -= 1;
             y3 += 1;
             y4 += 2;
+
+            PrintFigure();
         }
 
         private static void Fig31()
@@ -822,6 +866,7 @@ namespace TETA05
             y1 += 1;
             y3 += 1;
 
+            PrintFigure();
         }
 
         private static void Fig32()
@@ -834,6 +879,7 @@ namespace TETA05
             y1 -= 1;
             y3 -= 1;
 
+            PrintFigure();
         }
 
         static void Print()
